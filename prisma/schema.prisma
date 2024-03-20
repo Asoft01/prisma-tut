@@ -8,13 +8,28 @@ generator client {
   provider = "prisma-client-js"
 }
 
-  // provider = "postgresql"
+// provider = "postgresql"
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          String  @id @default(uuid())
+  name        String
+  email       String
+  isAdmin     Boolean
+  largeNumber BigInt
+  preferences Json
+  // blob Bytes
+  posts       Post[]
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  rating    Float
+  createdAt DateTime
+  updatedAt DateTime
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
 }

@@ -10,7 +10,7 @@ generator client {
 
 // provider = "postgresql"
 datasource db {
-  provider = "mysql"
+provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,17 +19,18 @@ model User {
   age            Int
   name           String
   email          String          @unique
-  isAdmin        Boolean
+  // isAdmin        Boolean
+  role           Role            @default(BASIC)
   largeNumber    BigInt
   preferences    Json
   // blob Bytes
   writtenPosts   Post[]          @relation("WrittentPosts")
   favouritePosts Post[]          @relation("FavouritePosts")
   userPreference UserPreference?
+  // index is for sorting and performance
 
   @@unique([age, name])
   @@index([email])
-  // index is for sorting and performance
 }
 
 model UserPreference {
@@ -58,4 +59,17 @@ model Category {
   id    String @id @default(uuid())
   name  String
   posts Post[]
+}
+
+model Product {
+  id String @id @default(cuid())
+  name String
+  description String
+  price Int 
+  
+}
+
+enum Role {
+  BASIC
+  ADMIN
 }
